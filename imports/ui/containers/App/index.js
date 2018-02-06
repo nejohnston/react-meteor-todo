@@ -14,9 +14,6 @@ import { withTracker } from "meteor/react-meteor-data";
 class App extends Component {
   constructor() {
     super();
-    this.state = {
-      todoList: []
-    };
     // We bind it so that when we pass it down the stack and
     // the function gets called, it refers to the context of
     // this class and not the class further down from where it gets called.
@@ -42,19 +39,16 @@ class App extends Component {
     // a new reference address in memory so react knows a
     // change has occurred. React only knows that a state has
     // changed when there is a change in the reference
-    this.setState({ todoList: [...this.props.todos] });
   }
 
   removeTodo(indexOfTodo) {
     const newList = this.props.todos.filter((item, i) => {
       return i !== indexOfTodo;
     });
-    this.setState({ todoList: newList });
   }
 
   addTodo() {
     this.props.todos.push({ title: this.state.currentInput, done: false });
-    this.setState({ currentInput: "", todoList: [...this.props.todos] });
   }
 
   addTodoRefs(event) {
@@ -66,22 +60,12 @@ class App extends Component {
         title: this.todoInput,
         done: false
       });
-      this.setState({
-        todos: newTodos,
-        lastId: id
-      });
       this.todoInput.value = "";
     }
   }
 
   addTodo2(todoText) {
     this.props.todos.push({ title: todoText, done: false });
-    this.setState({ todoList: this.props.todos });
-  }
-
-  newTodo(event) {
-    this.setState({ currentInput: event.target.value });
-    //this.setState({currentInput: that.refs.todo.value});
   }
 
   clearAll() {
@@ -89,7 +73,6 @@ class App extends Component {
       // filter to clear all unchecked boxes
       return item.done === false;
     });
-    this.setState({ todoList: newList });
   }
 
   getNumCompleted() {
