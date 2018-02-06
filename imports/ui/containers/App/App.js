@@ -105,9 +105,7 @@ class AppComponent extends Component {
   render() {
     return (
       <div className="todo-list">
-        <div className="todo-list">
           <HeaderComponent title="So Much To Do" />
-        </div>
         <div className="add-todo">
           <InputComponent
             addTodo2={this.addTodo2}
@@ -115,13 +113,11 @@ class AppComponent extends Component {
             currentInput={this.state.currentInput}
           />
         </div>
-        <div className="todo-list">
           <ListComponent
             updateTodos={this.updateTodos}
             removeTodo={this.removeTodo}
             todoList={this.state.todoList}
           />
-        </div>
         <div>
           <FooterComponent
             numsToDo={this.state.todoList.length}
