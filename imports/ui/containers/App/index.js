@@ -10,7 +10,7 @@ import FooterComponent from "../../components/FooterComponent.js";
 
 class AppComponent extends Component {
   constructor() {
-    super();
+super();
     this.state = {
       todoList: [
         { title: "TODO1", done: false },

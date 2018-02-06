@@ -9,6 +9,7 @@
     "meteor-node-stubs": "^0.3.2",
     "prop-types": "^15.6.0",
     "react": "^16.2.0",
+    "react-addons-pure-render-mixin": "^15.6.2",
     "react-dom": "^16.2.0"
   }
 }
