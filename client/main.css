@@ -1,139 +1,177 @@
-CSS declarations go here
-/* To-Do List */
+/* Imported Fonts */
 /*-----------------------------------------*/
 
+@import url(https://fonts.googleapis.com/css?family=Roboto:400,400italic,700,700italic);
+@import url(https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css);
+
+/* CSS Reset */
+/*-----------------------------------------*/
+
+/* http://meyerweb.com/eric/tools/css/reset/
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+
+/* HTML5 display-role reset for older browsers */
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+  display: block;
+}
+
+body {
+  line-height: 1;
+}
+
+ol,
+ul {
+  list-style: none;
+}
+
+blockquote,
+q {
+  quotes: none;
+}
+
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+  content: "";
+  content: none;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/* Global */
+/*-----------------------------------------*/
+
+* {
+  box-sizing: border-box;
+}
+
+*:focus {
+  outline: none;
+}
+
+html {
+  font-size: 18px;
+}
+
+body,
+button,
+input {
+  color: #111111;
+  font-family: "Roboto", sans-serif;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+body {
+  background-color: #2e2e2e;
+}
+
 #root {
-	display: flex;
-	justify-content: center;
-	height: 100%;
- }
- 
- .todo-list {
-	align-self: center;
-	background-color: grey;
-	border-radius: 5px;
-	width: 400px;
-	margin: auto;
- }
- 
- .todo-list h1 {
-	background-color: #a071b8;
-	border-top-left-radius: 5px;
-	border-top-right-radius: 5px;
-	color: white;
-	font-size: 2rem;
-	padding: 0.5rem 1rem;
-	text-align: center;
- }
- 
- .todo-list li {
-	border-bottom: 1px solid #dbdbdb;
-	display: flex;
-	font-size: 1.25rem;
-	padding: 1rem;
-	align-items: flex-start;
- }
- 
- .todo-list li span {
-	color: #ffffff;
-	 
-	flex: 1 0 60%;
-	font-size: .9rem;
-	margin-right: 1rem;
-	margin-top: 0.33333rem;
- }
- 
- .todo-list li input[type="checkbox"] {
-	display: none;
- }
- 
- .todo-list li input[type="checkbox"] + label:before {
-	display: inline-block;
-	color: #c2c2c2;
-	content: "\f10c";
-	cursor: pointer;
-	font-family: FontAwesome;
-	letter-spacing: 1rem;
-	margin-left: 1rem;
- }
- 
- .todo-list li input[type="checkbox"] + label:hover::before {
-	color: #4ccbb0;
- }
- 
- .todo-list li input[type="checkbox"]:checked + label:before {
-	color: #4ccbb0;
-	content: "\f05d";
- }
- 
- .todo-list li button {
-	background: transparent;
-	border: 0;
-	color: #c2c2c2;
-	cursor: pointer;
-	font-size: 1.25rem;
-	padding: 0;
- }
- 
- .todo-list li button:hover {
-	color: #fa4f4f;
- }
- 
- .add-todo {
-	background-color: #c2c2c2;
-	padding: 1rem;
- }
- 
- .add-todo form {
-	align-items: center;
-	display: flex;
-	justify-content: space-between;
- }
- 
- .add-todo form input[type="text"] {
-	background-color: transparent;
-	border: 0;
-	border-bottom: 1px solid #8f8f8f;
-	font-size: 1rem;
-	line-height: 1;
-	padding: 0.33333rem;
- }
- 
- .add-todo form input[type="text"]:focus {
-	border-bottom-color: #a071b8;
- }
- 
- .add-todo form span {
-	color: #8f8f8f;
-	font-size: 0.9rem;
-	line-height: 1;
-	text-align: right;
- }
- 
- .todo-admin {
-	align-items: center;
-	display: flex;
-	font-size: 0.9rem;
-	justify-content: space-between;
-	min-height: 68px;
-	padding: 1rem;
- }
- 
- .todo-admin div span {
-	color: #c2c2c2;
- }
- 
- .todo-admin button {
-	background-color: transparent;
-	border: 1px solid #a071b8;
-	color: #a071b8;
-	cursor: pointer;
-	font-size: .9rem;
-	padding: 0.16667rem 0.33333rem;
- }
- 
- .todo-admin button:hover {
-	border: 1px solid #4ccbb0;
-	color: #4ccbb0;
- }
- 
+  display: flex;
+  justify-content: center;
+  height: 100vh;
+}

@@ -1,114 +1,108 @@
 import React, { Component } from "react";
-import { render } from "react-dom";
-import HeaderComponent from "../../components/HeaderComponent.js";
-import ListComponent from "../../components/ListComponent.js";
-import InputComponent from "../../components/InputComponent.js";
-import FooterComponent from "../../components/FooterComponent.js";
+import PropTypes from "prop-types";
+import { withTracker } from "meteor/react-meteor-data";
+import "./styles.css";
+
+import ToDoItem from "../../components/ToDoItem";
+import ToDoCount from "../../components/ToDoCount";
+import ClearButton from "../../components/ClearButton";
 
 import { ToDos } from "../../../api/todos";
-import { withTracker } from "meteor/react-meteor-data";
-
-// import "./index.css";
-// import "./app.css";
 
 class App extends Component {
   constructor() {
     super();
-    // We bind it so that when we pass it down the stack and
-    // the function gets called, it refers to the context of
-    // this class and not the class further down from where it gets called.
-    // or updateTodos={()=> this.updateTodos}
-    // DO THIS IN THE CONSTRUCTOR so that any other times it is passed
-    // down, we do not have to call the bind method each time
-    this.updateTodos = this.updateTodos.bind(this);
-    this.removeTodo = this.removeTodo.bind(this);
-    this.addTodo = this.addTodo.bind(this);
-    this.newTodo = this.newTodo.bind(this);
-    this.addTodo2 = this.addTodo2.bind(this);
-    this.clearAll = this.clearAll.bind(this);
+
+    this.addToDo = this.addToDo.bind(this);
+    this.removeCompleted = this.removeCompleted.bind(this);
+    this.handleInputChange = this.handleInputChange.bind(this);
   }
 
-  updateTodos(indexOfTodo, done) {
-    // when we change the state we have to replace the whole thing
-    [indexOfTodo] = {
-      title: this.props.todos[indexOfTodo].title,
-      done
-    }; // es6 shortcut instead of done: done
-
-    // trigger re-rendering using a spread array to create
-    // a new reference address in memory so react knows a
-    // change has occurred. React only knows that a state has
-    // changed when there is a change in the reference
-  }
-
-  removeTodo(indexOfTodo) {
-    const newList = this.props.todos.filter((item, i) => {
-      return i !== indexOfTodo;
+  // toggle the checkbox to denote completion status
+  toggleComplete(item) {
+    let todos = this.state.todos.map(todo => {
+      if (item.id === todo.id) todo.complete = !todo.complete;
+      return todo;
     });
+
+    this.setState({ todos });
   }
 
-  addTodo() {
-    this.props.todos.push({ title: this.state.currentInput, done: false });
+  handleInputChange(event) {
+    this.setState({ inputValue: event.target.value });
   }
 
-  addTodoRefs(event) {
+  // add a new to do to the list
+  addToDo(event) {
     event.preventDefault();
-    const id = this.state.lastId + 1;
-    if (this.todoInput.value) {
-      let newTodos = this.state.todos.concat({
-        id,
-        title: this.todoInput,
-        done: false
+
+    if (this.toDoInput.value) {
+      ToDos.insert({
+        title: this.toDoInput.value,
+        complete: false
       });
-      this.todoInput.value = "";
+
+      this.toDoInput.value = "";
     }
   }
 
-  addTodo2(todoText) {
-    this.props.todos.push({ title: todoText, done: false });
+  // remove a to do from the list
+  removeToDo(item) {
+    ToDos.remove(item._id);
   }
 
-  clearAll() {
-    const newList = this.props.todos.filter((item, i) => {
-      // filter to clear all unchecked boxes
-      return item.done === false;
-    });
+  // remove all completed to dos from the list
+  removeCompleted() {
+    ToDos.find({ complete: true }).forEach(todo => ToDos.remove(todo._id));
   }
 
-  getNumCompleted() {
-    const newList = this.props.todos.filter((item, i) => {
-      return item.done;
-    });
-    return newList.length ? true : false;
+  // check if any of the todos are completed
+  hasCompleted() {
+    let completed = this.props.todos.filter(todo => todo.complete);
+    return completed.length > 0 ? true : false;
+  }
+
+  componentDidMount() {
+    this.toDoInput.focus();
   }
 
   render() {
+    let number = this.props.todos.length;
+
     return (
       <div className="todo-list">
-        <HeaderComponent title="So Much To Do" />
+        <h1>So Much To Do</h1>
         <div className="add-todo">
-          <InputComponent
-            addTodo2={this.addTodo2}
-            newTodo={this.newTodo}
-            currentInput={this.state.currentInput}
-          />
+          <form name="addTodo" onSubmit={this.addToDo}>
+            <input type="text" ref={ref => (this.toDoInput = ref)} />
+            <span>(press enter to add) </span>
+          </form>
         </div>
-        <ListComponent
-          updateTodos={this.updateTodos}
-          removeTodo={this.removeTodo}
-          todoList={this.props.todos}
-        />
-        <div>
-          <FooterComponent
-            numsToDo={this.props.todos.length}
-            hasCompleted={this.getNumCompleted()}
-            clearAll={this.clearAll}
-          />
+        <ul>
+          {this.props.todos.map((todo, index) => (
+            <ToDoItem
+              key={index}
+              item={todo}
+              toggleComplete={this.toggleComplete.bind(this, todo)}
+              removeToDo={this.removeToDo.bind(this, todo)}
+            />
+          ))}
+        </ul>
+        <div className="todo-admin">
+          <ToDoCount number={number} />
+          {this.hasCompleted() && (
+            <ClearButton removeCompleted={this.removeCompleted} />
+          )}
         </div>
       </div>
     );
   }
 }
+
+App.defaultProps = {
+  todos: []
+};
+
 export default withTracker(() => {
   return {
     todos: ToDos.find({}).fetch()
