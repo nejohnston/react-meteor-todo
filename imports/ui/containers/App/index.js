@@ -5,20 +5,17 @@ import ListComponent from "../../components/ListComponent.js";
 import InputComponent from "../../components/InputComponent.js";
 import FooterComponent from "../../components/FooterComponent.js";
 
+import { ToDos } from "../../../api/todos";
+import { withTracker } from "meteor/react-meteor-data";
+
 // import "./index.css";
 // import "./app.css";
 
-class AppComponent extends Component {
+class App extends Component {
   constructor() {
-super();
+    super();
     this.state = {
-      todoList: [
-        { title: "TODO1", done: false },
-        { title: "TODO2", done: false },
-        { title: "TODO3", done: false },
-        { title: "TODO4", done: false }
-      ],
-      currentInput: ""
+      todoList: []
     };
     // We bind it so that when we pass it down the stack and
     // the function gets called, it refers to the context of
@@ -36,8 +33,8 @@ super();
 
   updateTodos(indexOfTodo, done) {
     // when we change the state we have to replace the whole thing
-    this.state.todoList[indexOfTodo] = {
-      title: this.state.todoList[indexOfTodo].title,
+    [indexOfTodo] = {
+      title: this.props.todos[indexOfTodo].title,
       done
     }; // es6 shortcut instead of done: done
 
@@ -45,19 +42,19 @@ super();
     // a new reference address in memory so react knows a
     // change has occurred. React only knows that a state has
     // changed when there is a change in the reference
-    this.setState({ todoList: [...this.state.todoList] });
+    this.setState({ todoList: [...this.props.todos] });
   }
 
   removeTodo(indexOfTodo) {
-    const newList = this.state.todoList.filter((item, i) => {
+    const newList = this.props.todos.filter((item, i) => {
       return i !== indexOfTodo;
     });
     this.setState({ todoList: newList });
   }
 
   addTodo() {
-    this.state.todoList.push({ title: this.state.currentInput, done: false });
-    this.setState({ currentInput: "", todoList: [...this.state.todoList] });
+    this.props.todos.push({ title: this.state.currentInput, done: false });
+    this.setState({ currentInput: "", todoList: [...this.props.todos] });
   }
 
   addTodoRefs(event) {
@@ -78,8 +75,8 @@ super();
   }
 
   addTodo2(todoText) {
-    this.state.todoList.push({ title: todoText, done: false });
-    this.setState({ todoList: this.state.todoList });
+    this.props.todos.push({ title: todoText, done: false });
+    this.setState({ todoList: this.props.todos });
   }
 
   newTodo(event) {
@@ -88,7 +85,7 @@ super();
   }
 
   clearAll() {
-    const newList = this.state.todoList.filter((item, i) => {
+    const newList = this.props.todos.filter((item, i) => {
       // filter to clear all unchecked boxes
       return item.done === false;
     });
@@ -96,7 +93,7 @@ super();
   }
 
   getNumCompleted() {
-    const newList = this.state.todoList.filter((item, i) => {
+    const newList = this.props.todos.filter((item, i) => {
       return item.done;
     });
     return newList.length ? true : false;
@@ -105,7 +102,7 @@ super();
   render() {
     return (
       <div className="todo-list">
-          <HeaderComponent title="So Much To Do" />
+        <HeaderComponent title="So Much To Do" />
         <div className="add-todo">
           <InputComponent
             addTodo2={this.addTodo2}
@@ -113,14 +110,14 @@ super();
             currentInput={this.state.currentInput}
           />
         </div>
-          <ListComponent
-            updateTodos={this.updateTodos}
-            removeTodo={this.removeTodo}
-            todoList={this.state.todoList}
-          />
+        <ListComponent
+          updateTodos={this.updateTodos}
+          removeTodo={this.removeTodo}
+          todoList={this.props.todos}
+        />
         <div>
           <FooterComponent
-            numsToDo={this.state.todoList.length}
+            numsToDo={this.props.todos.length}
             hasCompleted={this.getNumCompleted()}
             clearAll={this.clearAll}
           />
@@ -129,4 +126,8 @@ super();
     );
   }
 }
-export default AppComponent
+export default withTracker(() => {
+  return {
+    todos: ToDos.find({}).fetch()
+  };
+})(App);
