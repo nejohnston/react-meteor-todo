@@ -25,10 +25,6 @@ class App extends Component {
     Meteor.call("todos.toggleComplete", item);
   }
 
-  handleInputChange(event) {
-    this.setState({ inputValue: event.target.value });
-  }
-
   // add a new to do to the list
   addToDo(event) {
     // event.preventDefault stays here, not in fixtures b/c has nothing to do w/ server
@@ -117,6 +113,7 @@ App.propTypes = {
 };
 
 export default withTracker(() => {
+  Meteor.subscribe("todos"); // NEW!
   return {
     currentUser: Meteor.user(),
     currentUserId: Meteor.userId(),
