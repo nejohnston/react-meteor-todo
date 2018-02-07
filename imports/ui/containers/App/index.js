@@ -72,28 +72,36 @@ class App extends Component {
         </div>
         <div className="todo-list">
           <h1>So Much To Do</h1>
-          <div className="add-todo">
-            <form name="addTodo" onSubmit={this.addToDo}>
-              <input type="text" ref={ref => (this.toDoInput = ref)} />
-              <span>(press enter to add) </span>
-            </form>
-          </div>
-          <ul>
-            {this.props.todos.map((todo, index) => (
-              <ToDoItem
-                key={index}
-                item={todo}
-                toggleComplete={this.toggleComplete.bind(this, todo)}
-                removeToDo={this.removeToDo.bind(this, todo)}
-              />
-            ))}
-          </ul>
-          <div className="todo-admin">
-            <ToDoCount number={number} />
-            {this.hasCompleted() && (
-              <ClearButton removeCompleted={this.removeCompleted} />
-            )}
-          </div>
+          {this.props.currentUser ? (
+            <div>
+              <div className="add-todo">
+                <form name="addTodo" onSubmit={this.addToDo}>
+                  <input type="text" ref={ref => (this.toDoInput = ref)} />
+                  <span>(press enter to add) </span>
+                </form>
+              </div>
+              <ul>
+                {this.props.todos.map((todo, index) => (
+                  <ToDoItem
+                    key={index}
+                    item={todo}
+                    toggleComplete={this.toggleComplete.bind(this, todo)}
+                    removeToDo={this.removeToDo.bind(this, todo)}
+                  />
+                ))}
+              </ul>
+              <div className="todo-admin">
+                <ToDoCount number={number} />
+                {this.hasCompleted() && (
+                  <ClearButton removeCompleted={this.removeCompleted} />
+                )}
+              </div>
+            </div>
+          ) : (
+            <div className="logged-out-message">
+              <p>Please sign in to see your todos</p>
+            </div>
+          )}
         </div>
       </div>
     );
@@ -104,8 +112,9 @@ App.defaultProps = {
   todos: []
 };
 
-App.PropTypes = {
+App.propTypes = {
   todos: PropTypes.array.isRequired,
+  // good idea to specify how the structure of the object
   currentUser: PropTypes.object,
   currentUserId: PropTypes.string
 };
