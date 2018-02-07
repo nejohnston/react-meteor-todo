@@ -21,7 +21,8 @@ class App extends Component {
 
   // toggle the checkbox to denote completion status
   toggleComplete(item) {
-    ToDos.update(item._id, { $set: { complete: !item.complete } });
+    // ToDos.update(item._id, { $set: { complete: !item.complete } });
+    Meteor.call("todos.toggleComplete", item);
   }
 
   handleInputChange(event) {
