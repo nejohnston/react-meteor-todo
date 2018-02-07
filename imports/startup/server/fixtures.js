@@ -9,7 +9,11 @@ Meteor.startup(() => {
       password: "pass"
     });
     if (ToDos.find().count() === 0) {
-      ToDos.insert({ title: "Learn Meteor Again", complete: false });
+      ToDos.insert({
+        title: "Learn Meteor Again",
+        complete: false,
+        owner: userId
+      });
     }
   }
 });
