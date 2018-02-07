@@ -35,7 +35,8 @@ class App extends Component {
     if (this.toDoInput.value) {
       ToDos.insert({
         title: this.toDoInput.value,
-        complete: false
+        complete: false,
+        owner: this.props.currentUserId
       });
 
       this.toDoInput.value = "";
@@ -59,7 +60,7 @@ class App extends Component {
   }
 
   componentDidMount() {
-    this.toDoInput.focus();
+    this.props.currentUser && this.toDoInput.focus();
   }
 
   render() {
