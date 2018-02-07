@@ -104,8 +104,16 @@ App.defaultProps = {
   todos: []
 };
 
+App.PropTypes = {
+  todos: PropTypes.array.isRequired,
+  currentUser: PropTypes.object,
+  currentUserId: PropTypes.string
+};
+
 export default withTracker(() => {
   return {
+    currentUser: Meteor.user(),
+    currentUserId: Meteor.userId(),
     todos: ToDos.find({}).fetch()
   };
 })(App);
