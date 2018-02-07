@@ -8,6 +8,19 @@ Meteor.methods({
   // Adding a todo
   "todos.addToDo"(inputValue) {
     // CODE HERE
+    // Checking just if there is a user, todo doesn't have an owner b/c it hasn't been created duh
+    // meteor exposes userid from server side
+    if (!this.userId) {
+      throw new Meteor.Error(
+        "todos.addToDo.not-authorized",
+        "You must be logged in to create a todo"
+      );
+    }
+    ToDos.insert({
+      title: inputValue,
+      complete: false,
+      owner: this.userId
+    });
   },
 
   // Toggling complete (update)
@@ -21,11 +34,30 @@ Meteor.methods({
     ToDos.update(item._id, {
       $set: { complete: !item.complete }
     });
-  }
+  },
 
   // Removing a todo
 
+  "todos.removeToDo"(item) {
+    if (item.owner !== this.userId) {
+      throw new Meteor.Error(
+        "todos.removeToDo.not-authorized",
+        "You are not allowed to update to-dos for other users"
+      );
+    }
+    ToDos.remove(item._id);
+  },
+
   // Removing all completed todos
+  "todos.removeCompleted"(owner) {
+    if (owner !== this.userId) {
+      throw new Meteor.Error(
+        "todos.removeToDo.not-authorized",
+        "You are not allowed to update to-dos for other users"
+      );
+    }
+    ToDos.remove({ owner: this.userId, complete: true });
+  }
 });
 
 export const ToDos = new Mongo.Collection("todos");

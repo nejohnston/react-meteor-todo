@@ -31,27 +31,22 @@ class App extends Component {
 
   // add a new to do to the list
   addToDo(event) {
+    // event.preventDefault stays here, not in fixtures b/c has nothing to do w/ server
     event.preventDefault();
-
     if (this.toDoInput.value) {
-      ToDos.insert({
-        title: this.toDoInput.value,
-        complete: false,
-        owner: this.props.currentUserId
-      });
-
+      Meteor.call("todos.addToDo", this.toDoInput.value);
       this.toDoInput.value = "";
     }
   }
 
   // remove a to do from the list
   removeToDo(item) {
-    ToDos.remove(item._id);
+    Meteor.call("todos.removeToDo", item);
   }
 
   // remove all completed to dos from the list
   removeCompleted() {
-    ToDos.find({ complete: true }).forEach(todo => ToDos.remove(todo._id));
+    Meteor.call("todos.removeCompleted", this.props.currentUserId);
   }
 
   // check if any of the todos are completed
