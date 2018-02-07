@@ -1,5 +1,14 @@
 import { Mongo } from "meteor/mongo";
 
+export const ToDos = new Mongo.Collection("todos");
+
+// checks on server for who's logged. query for documents based on owner field
+if (Meteor.isServer) {
+  Meteor.publish("todos", function todosPublication() {
+    return ToDos.find({ owner: this.userId });
+  });
+}
+
 // all methods specific to todos
 // meteor asks that methods be defined as a string.
 // structure = <collection>.<whatever we want method to be named>
@@ -59,5 +68,3 @@ Meteor.methods({
     ToDos.remove({ owner: this.userId, complete: true });
   }
 });
-
-export const ToDos = new Mongo.Collection("todos");
