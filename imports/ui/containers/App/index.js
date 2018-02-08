@@ -16,7 +16,6 @@ class App extends Component {
 
     this.addToDo = this.addToDo.bind(this);
     this.removeCompleted = this.removeCompleted.bind(this);
-    this.handleInputChange = this.handleInputChange.bind(this);
   }
 
   // toggle the checkbox to denote completion status
@@ -70,7 +69,7 @@ class App extends Component {
               <div className="add-todo">
                 <form name="addTodo" onSubmit={this.addToDo}>
                   <input type="text" ref={ref => (this.toDoInput = ref)} />
-                  <span>(press enter to add) </span>
+                  <span>(press enter to add)</span>
                 </form>
               </div>
               <ul>
