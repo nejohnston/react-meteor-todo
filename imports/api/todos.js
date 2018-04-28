@@ -12,12 +12,14 @@ if (Meteor.isServer) {
 // all methods specific to todos
 // meteor asks that methods be defined as a string.
 // structure = <collection>.<whatever we want method to be named>
-// when doing Meteor.methods, we have access to all values associated with todos
+// when doing Meteor.methods, we have access to all values
+// associated with todos
 Meteor.methods({
   // Adding a todo
   "todos.addToDo"(inputValue) {
     // CODE HERE
-    // Checking just if there is a user, todo doesn't have an owner b/c it hasn't been created duh
+    // Checking just if there is a user, todo doesn't have
+    // an owner b/c it hasn't been created duh
     // meteor exposes userid from server side
     if (!this.userId) {
       throw new Meteor.Error(
